@@ -5,7 +5,7 @@ import 'GamesWidget.dart';
 import 'TableManager.dart';
 import 'SettingsScaffold.dart';
 import 'Welcome.dart';
-import 'AddGameDialog.dart';
+import 'DialogWidget.dart';
 import 'GameManager.dart';
 
 void main() => runApp(MyApp());
@@ -160,14 +160,16 @@ class _MyHomePageState extends State<MyHomePage>
 
         GamesWidget gamesWidget = GamesWidget(gameManager: _gamesManager);
 
-        return Scaffold(
+        AppBar appBar = AppBar(
+            title: Text(widget.title, style: TextStyle(color: _mainColor)),
+            elevation: Defines.elevation,
+            backgroundColor: Defines.barColor,
+            brightness: Defines.brightness,
+        );
+
+        Widget mainScaffold = Scaffold(
             backgroundColor: Defines.contentColor,
-            appBar: AppBar(
-                title: Text(widget.title, style: TextStyle(color: _mainColor)),
-                elevation: Defines.elevation,
-                backgroundColor: Defines.barColor,
-                brightness: Defines.brightness,
-            ),
+            appBar: appBar,
             body: Container(
                 color: Defines.contentColor,
                 margin: EdgeInsets.only(),
@@ -196,17 +198,11 @@ class _MyHomePageState extends State<MyHomePage>
                 },
             ),
             drawer: drawer,
-//            floatingActionButton: _pageIndex == 1 ? FloatingActionButton(
-//                onPressed: (){},
-//                child: Icon(Icons.add),
-//                backgroundColor: Defines.mainColor,
-//                elevation: Defines.elevation,
-//                tooltip: "Add game results",
-//            ) : null,
             floatingActionButton: _pageIndex == 1 ? FloatingActionButton.extended(
                 onPressed: ()
                 {
-                    AddGameWidget.show(context, _gamesManager);
+                    Navigator.of(context).push(TutorialOverlay());
+//                    AddGameWidget.show(context, _gamesManager);
                 },
                 icon: Icon(Icons.add),
                 backgroundColor: _mainColor,
@@ -214,5 +210,14 @@ class _MyHomePageState extends State<MyHomePage>
                 label: Text("Add game results"),
             ) : null,
         );
+
+        Stack content = Stack(
+            children: [
+                mainScaffold,
+//                AddGameWidget(gameManager: _gamesManager)
+            ]
+        );
+
+        return content;
     }
 }

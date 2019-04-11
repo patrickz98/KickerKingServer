@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'Simple.dart';
 import 'GameManager.dart';
+import 'AddGameDialog.dart';
 
 class GamesWidget extends StatefulWidget
 {
@@ -72,6 +73,7 @@ class _GamesWidgetSate extends State<GamesWidget>
         );
 
         Container tableContainer = Container(child: table, padding: EdgeInsets.all(8.0));
+
         return tableContainer;
     }
 }
