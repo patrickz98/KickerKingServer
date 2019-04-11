@@ -1,10 +1,26 @@
 import 'package:flutter/material.dart';
 
 import 'Simple.dart';
-import 'GameManager.dart';
 
-class TutorialOverlay extends ModalRoute<void>
+class CustomDialog extends ModalRoute<void>
 {
+    final String title;
+    final Widget body;
+    final VoidCallback ok;
+    final VoidCallback cancel;
+
+    CustomDialog({
+        @required this.title,
+        @required this.body,
+        @required this.ok,
+        @required this.cancel
+    }) : assert(
+        title  != null &&
+        body   != null &&
+        ok     != null &&
+        cancel != null
+    );
+
     @override
     Duration get transitionDuration => Duration(milliseconds: 500);
 
@@ -35,37 +51,13 @@ class TutorialOverlay extends ModalRoute<void>
             type: MaterialType.transparency,
             // make sure that the overlay content is not cut off
             child: SafeArea(
-//                child: _buildOverlayContent(context),
                 child: DialogWidget(
-                    title: "Test",
-                    callback: (_)
-                    {
-                        Navigator.pop(context);
-                    },
+                    title: title,
+                    body: body,
+                    ok: ok,
+                    cancel: cancel,
                 ),
             ),
-        );
-    }
-
-    Widget _buildOverlayContent(BuildContext context)
-    {
-        return Container(
-            color: Colors.orange,
-            child: Center(
-                child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                        Text(
-                            'This is a nice overlay',
-                            style: TextStyle(color: Colors.white, fontSize: 30.0),
-                        ),
-                        RaisedButton(
-                            onPressed: () => Navigator.pop(context),
-                            child: Text('Dismiss'),
-                        )
-                    ],
-                ),
-            )
         );
     }
 
@@ -77,14 +69,6 @@ class TutorialOverlay extends ModalRoute<void>
         Widget child
     )
     {
-        // You can add your own animations for the overlay content
-//        return FadeTransition(
-//            opacity: animation,
-//            child: ScaleTransition(
-//                scale: animation,
-//                child: child,
-//            ),
-//        );
         return SlideTransition(
             position: Tween<Offset>(
                 begin: const Offset(0.0, 1.0),
@@ -99,7 +83,7 @@ class TutorialOverlay extends ModalRoute<void>
                     ),
                 )
             ),
-            child: child, // child is the value returned by pageBuilder
+            child: child,
         );
     }
 }
@@ -107,12 +91,20 @@ class TutorialOverlay extends ModalRoute<void>
 class DialogWidget extends StatefulWidget
 {
     final String title;
-    final ValueChanged<int> callback;
+    final Widget body;
+    final VoidCallback ok;
+    final VoidCallback cancel;
 
     DialogWidget({
         @required this.title,
-        @required this.callback
-    }) : assert(title != null && callback != null);
+        @required this.body,
+        @required this.ok,
+        @required this.cancel
+    }) : assert(
+        title  != null &&
+        ok     != null &&
+        cancel != null
+    );
 
     @override
     State createState() => _DialogWidgetState();
@@ -120,100 +112,114 @@ class DialogWidget extends StatefulWidget
 
 class _DialogWidgetState extends State<DialogWidget>
 {
+    static const _radius = 20.0;
+    static const _barHeight = 50.0;
+    static const _barColor = Colors.blue;
+
+    Widget _title()
+    {
+        Container container = Container(
+            height: _barHeight,
+            decoration: BoxDecoration(
+                color: _barColor,
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(_radius),
+                    topRight: Radius.circular(_radius)
+                )
+            ),
+            child: Center(
+                child: Text(
+                    widget.title,
+                    style: TextStyle(
+                        color: Defines.textColor,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20
+                    ),
+                )
+            )
+        );
+
+        Row expand = Row(
+            children: [
+                Expanded(child: container)
+            ]
+        );
+
+        return expand;
+    }
+
+    Widget _buttons()
+    {
+        Widget okButton = GestureDetector(
+            child: Container(
+                height: _barHeight,
+                decoration: BoxDecoration(
+                    color: _barColor,
+                    borderRadius: BorderRadius.only(
+                        bottomRight: Radius.circular(_radius)
+                    )
+                ),
+                child: Center(
+                    child: Simple.text("OK")
+                ),
+                margin: EdgeInsets.all(0),
+            ),
+            onTap: widget.ok,
+        );
+
+        Widget cancelButton = GestureDetector(
+            child: Container(
+                height: _barHeight,
+                decoration: BoxDecoration(
+                    color: _barColor,
+                    borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(_radius)
+                    )
+                ),
+                child: Center(
+                    child: Simple.text("Cancel")
+                ),
+                margin: EdgeInsets.all(0),
+            ),
+            onTap: widget.cancel,
+        );
+
+        Row row = Row(
+            children: [
+                Expanded(child: cancelButton),
+                Container(width: 2),
+                Expanded(child: okButton),
+            ]
+        );
+
+        return row;
+    }
+
     @override
     Widget build(BuildContext context)
     {
         Widget body = Container(
             alignment: Alignment.topCenter,
-            padding: EdgeInsets.only(),
-            child: Card(
+            padding: EdgeInsets.all(0),
+            child: Container(
+                alignment: Alignment.topLeft,
                 margin: EdgeInsets.all(0),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
+                padding: EdgeInsets.all(0),
+                decoration: BoxDecoration(
+                    color: Defines.contentColor,
+                    borderRadius: BorderRadius.all(Radius.circular(_radius))
                 ),
-                color: Defines.contentColor,
-                child: Container(
-                    alignment: Alignment.topLeft,
-                    margin: EdgeInsets.all(0),
-                    padding: EdgeInsets.all(0),
-                    child: Column(
-                        children: [
-                            Row(
-                                children: [
-                                    Expanded(
-                                        child: Container(
-                                            height: 50,
-                                            decoration: BoxDecoration(
-                                                color: Colors.blue,
-                                                borderRadius: BorderRadius.only(
-                                                    topLeft: Radius.circular(
-                                                        20),
-                                                    topRight: Radius.circular(
-                                                        20)
-                                                )
-                                            ),
-                                            child: Center(
-                                                child: Simple.text(widget.title)
-                                            )
-                                        ),
-                                    )
-                                ],
-                            ),
-                            Expanded(
-                                child: Container()
-                            ),
-                            Row(
-                                children: [
-                                    Expanded(
-                                        child: GestureDetector(
-                                            child: Container(
-                                                height: 50,
-                                                decoration: BoxDecoration(
-                                                    color: Colors.blue,
-                                                    borderRadius: BorderRadius
-                                                        .only(bottomLeft: Radius
-                                                        .circular(20))
-                                                ),
-                                                child: Center(
-                                                    child: Simple.text("Cancel")
-                                                ),
-                                                margin: EdgeInsets.all(0),
-                                            ),
-                                            onTap: ()
-                                            {
-                                                widget.callback(1);
-                                            },
-                                        ),
-                                    ),
-                                    Container(width: 2),
-                                    Expanded(
-                                        child: GestureDetector(
-                                            child: Container(
-                                                height: 50,
-                                                decoration: BoxDecoration(
-                                                    color: Colors.blue,
-                                                    borderRadius: BorderRadius
-                                                        .only(
-                                                        bottomRight: Radius
-                                                            .circular(20))
-                                                ),
-                                                child: Center(
-                                                    child: Simple.text("Add")
-                                                ),
-                                                margin: EdgeInsets.all(0),
-                                            ),
-                                        )
-                                    ),
-                                ],
-                            )
-                        ],
-                    ),
-                )
+                child: Column(
+                    children: [
+                        _title(),
+                        Expanded(child: widget.body),
+                        _buttons()
+                    ],
+                ),
             ),
         );
 
         Container dimmer = Container(
-//            color: Colors.black.withOpacity(0.5),
 //            margin: EdgeInsets.only(top: 56), + SafeArea
             padding: EdgeInsets.all(20.0),
             child: SafeArea(child: body),

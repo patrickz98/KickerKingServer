@@ -6,6 +6,7 @@ import 'TableManager.dart';
 import 'SettingsScaffold.dart';
 import 'Welcome.dart';
 import 'DialogWidget.dart';
+import 'AddGameDialog.dart';
 import 'GameManager.dart';
 
 void main() => runApp(MyApp());
@@ -201,8 +202,8 @@ class _MyHomePageState extends State<MyHomePage>
             floatingActionButton: _pageIndex == 1 ? FloatingActionButton.extended(
                 onPressed: ()
                 {
-                    Navigator.of(context).push(TutorialOverlay());
-//                    AddGameWidget.show(context, _gamesManager);
+                    AddGameDialog dialog = AddGameDialog(gameManager: _gamesManager);
+                    Navigator.of(context).push(dialog.build(context));
                 },
                 icon: Icon(Icons.add),
                 backgroundColor: _mainColor,
