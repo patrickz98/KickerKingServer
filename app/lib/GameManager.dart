@@ -44,39 +44,22 @@ class Game
 class GameManager
 {
     List<Game> _games = [];
+    ChangeNotifier _listeners;
 
     List<Game> all() => _games;
 
-    GameManager()
+    void add(Game game)
     {
-        Game game1 = Game(
-            winner: ["Patrick"],
-            looser: ["Ole"],
-            winnerPoints: 10,
-            looserPoints: 9,
-            date: DateTime.now(),
-        );
+        _games.add(game);
+    }
 
-        _games.add(game1);
+    void addListener(VoidCallback callback)
+    {
+        _listeners.addListener(callback);
+    }
 
-        Game game2 = Game(
-            winner: ["Patrick", "Daniel"],
-            looser: ["Ole", "Thomas"],
-            winnerPoints: 10,
-            looserPoints: 5,
-            date: DateTime.now(),
-        );
-
-        _games.add(game2);
-
-        Game game3 = Game(
-            winner: ["Daniel"],
-            looser: ["Thomas"],
-            winnerPoints: 10,
-            looserPoints: 6,
-            date: DateTime.now(),
-        );
-
-        _games.add(game3);
+    void removeListener(VoidCallback callback)
+    {
+        _listeners.removeListener(callback);
     }
 }

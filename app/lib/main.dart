@@ -39,35 +39,26 @@ class _MyHomePageState extends State<MyHomePage>
     int _tableIndex = 0;
     int _pageIndex = 0;
 
+    bool showLoading = true;
+
     Color _mainColor = Defines.tableColors[ 0 ];
 
-    TableManager _tableManager;
     GameManager _gamesManager = GameManager();
-    bool _init = false;
+    TableManager _tableManager;
 
-    void _tableManagerChanged(bool value)
+    _MyHomePageState()
     {
-        setState(()
-        {
-            _init = value;
-        });
+        _tableManager = TableManager(_tableChanged);
+    }
+
+    void _tableChanged(String table)
+    {
+
     }
 
     @override
     Widget build(BuildContext context)
     {
-        _tableManager = TableManager(changeEvent: _tableManagerChanged);
-
-//        if (true)
-//        {
-//            return WelcomeWidget();
-//        }
-
-//        if (! _init)
-//        {
-//            return AddTableWidget(tableManager: _tableManager);
-//        }
-
         Icon gamesIcon = Icon(Icons.list);
         BottomNavigationBarItem games = BottomNavigationBarItem(
             icon: gamesIcon,

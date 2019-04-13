@@ -1,17 +1,23 @@
 import 'package:flutter/material.dart';
 
+import 'Simple.dart';
+
 class TableManager
 {
-    final ValueChanged<bool> changeEvent;
-    bool ok = false;
+    final ValueChanged<String> _tableChanged;
 
-    TableManager({
-        @required this.changeEvent,
-    }) : assert(changeEvent != null);
+    String selected;
+    List<String> tableIds;
 
-    void setOk()
+    TableManager(this._tableChanged);
+
+    void addTables(List<String> tables)
     {
-        ok = true;
-        changeEvent(ok);
+        tableIds.addAll(tables);
+    }
+
+    void removeTable(String table)
+    {
+        tableIds.remove(table);
     }
 }

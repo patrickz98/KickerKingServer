@@ -5,6 +5,11 @@ export 'Defines.dart';
 
 class Simple
 {
+    static TextStyle textStyle()
+    {
+        return TextStyle(color: Defines.textColor);
+    }
+
     static Text text(String str, [TextStyle style = const TextStyle()])
     {
         return Text(str, style: TextStyle(color: Defines.textColor).merge(style));
@@ -30,5 +35,12 @@ class Simple
         );
 
         return circle;
+    }
+
+    static Widget loading()
+    {
+        return Center(
+            child: CircularProgressIndicator()
+        );
     }
 }

@@ -199,23 +199,18 @@ class _DialogWidgetState extends State<DialogWidget>
     Widget build(BuildContext context)
     {
         Widget body = Container(
-            alignment: Alignment.topCenter,
-            padding: EdgeInsets.all(0),
-            child: Container(
-                alignment: Alignment.topLeft,
-                margin: EdgeInsets.all(0),
-                padding: EdgeInsets.all(0),
-                decoration: BoxDecoration(
-                    color: Defines.contentColor,
-                    borderRadius: BorderRadius.all(Radius.circular(_radius))
-                ),
-                child: Column(
-                    children: [
-                        _title(),
-                        Expanded(child: widget.body),
-                        _buttons()
-                    ],
-                ),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+                color: Defines.contentColor,
+                borderRadius: BorderRadius.all(Radius.circular(_radius))
+            ),
+            child: Column(
+                children: [
+                    _title(),
+                    Expanded(child: widget.body),
+//                    widget.body,
+                    _buttons()
+                ],
             ),
         );
 

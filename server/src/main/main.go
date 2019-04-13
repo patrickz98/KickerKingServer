@@ -43,7 +43,7 @@ func randomUser(count int) []User {
 		id := newId(8)
 
 		user := User{
-			Nick: id,
+			Nick: "Nick-" + id,
 			ID: id,
 		}
 

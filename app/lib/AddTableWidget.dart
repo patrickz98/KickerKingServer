@@ -79,7 +79,7 @@ class AddTableWidgetState extends State<AddTableWidget>
             child: container,
             onPressed: ()
             {
-                widget.tableManager.setOk();
+//                widget.tableManager.setOk();
             },
         );
 
