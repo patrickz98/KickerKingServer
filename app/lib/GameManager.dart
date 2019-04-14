@@ -44,13 +44,15 @@ class Game
 class GameManager
 {
     List<Game> _games = [];
-    ChangeNotifier _listeners;
+    ChangeNotifier _listeners = ChangeNotifier();
 
     List<Game> all() => _games;
 
     void add(Game game)
     {
+        print("add: game=" + game.toJson().toString());
         _games.add(game);
+        _listeners.notifyListeners();
     }
 
     void addListener(VoidCallback callback)

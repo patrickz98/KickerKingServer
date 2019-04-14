@@ -20,6 +20,26 @@ class GamesWidget extends StatefulWidget
 class _GamesWidgetSate extends State<GamesWidget>
 {
     @override
+    void initState()
+    {
+        super.initState();
+        widget.gameManager.addListener(_updateTable);
+    }
+
+    @override
+    void dispose()
+    {
+        super.dispose();
+        widget.gameManager.addListener(_updateTable);
+    }
+
+    void _updateTable()
+    {
+        print("_updateTable");
+        setState((){});
+    }
+
+    @override
     Widget build(BuildContext context)
     {
         TableRow row1 = TableRow(

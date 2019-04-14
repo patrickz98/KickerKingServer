@@ -17,31 +17,29 @@ class AddGameDialog
     CustomDialog build(BuildContext context)
     {
         return CustomDialog(
-            title: "Add Game",
-            body: _AddGameWidget(gameManager),
-            ok: ()
-            {
-                Navigator.of(context).pop();
-            },
-            cancel: ()
-            {
-                Navigator.of(context).pop();
-            },
+            body: _AddGameWidget(
+                title: "Add Game",
+                gameManager: gameManager
+            ),
         );
     }
 }
 
-class _AddGameWidget extends StatefulWidget
+class _AddGameWidget extends CustomDialogWidget
 {
     final GameManager gameManager;
+    final String title;
 
-    _AddGameWidget(this.gameManager) : assert(gameManager != null);
+    _AddGameWidget({
+        @required this.title,
+        @required this.gameManager
+    }) : assert(gameManager != null), super(title: title);
 
     @override
-    State createState() => _AddGameWidgetState();
+    State createState() => _AddGameWidgetState(gameManager);
 }
 
-class _AddGameWidgetState extends State<_AddGameWidget>
+class _AddGameWidgetState extends CustomDialogWidgetState
 {
     String _selectedWinner1;
     String _selectedLooser1;
@@ -56,6 +54,10 @@ class _AddGameWidgetState extends State<_AddGameWidget>
     int _looserPoints = 0;
 
     List<String> _player = ["Patrick", "Daniel", "Ole", "Pascal", "Thomas"];
+
+    final GameManager gameManager;
+
+    _AddGameWidgetState(this.gameManager);
 
     Theme _coloredDropdown(DropdownButton button)
     {
@@ -352,7 +354,28 @@ class _AddGameWidgetState extends State<_AddGameWidget>
     }
 
     @override
-    Widget build(BuildContext context)
+    bool get okEnabled => (_selectedWinner1 != null) && (_selectedLooser1 != null);
+
+    @override
+    void onOk()
+    {
+        super.onOk();
+
+        Game game = Game
+        (
+            winner: [_selectedWinner1],
+            looser: [_selectedLooser1],
+            winnerPoints: _winnerPoints,
+            looserPoints: _looserPoints,
+            date: new DateTime.now()
+        );
+
+        gameManager.add(game);
+    }
+
+
+    @override
+    Widget getBody(BuildContext context)
     {
         List<TableRow> rows = [];
         rows.add(_winnerList());

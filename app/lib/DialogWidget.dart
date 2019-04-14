@@ -4,22 +4,11 @@ import 'Simple.dart';
 
 class CustomDialog extends ModalRoute<void>
 {
-    final String title;
-    final Widget body;
-    final VoidCallback ok;
-    final VoidCallback cancel;
+    final CustomDialogWidget body;
 
     CustomDialog({
-        @required this.title,
         @required this.body,
-        @required this.ok,
-        @required this.cancel
-    }) : assert(
-        title  != null &&
-        body   != null &&
-        ok     != null &&
-        cancel != null
-    );
+    }) : assert(body != null);
 
     @override
     Duration get transitionDuration => Duration(milliseconds: 500);
@@ -51,12 +40,7 @@ class CustomDialog extends ModalRoute<void>
             type: MaterialType.transparency,
             // make sure that the overlay content is not cut off
             child: SafeArea(
-                child: DialogWidget(
-                    title: title,
-                    body: body,
-                    ok: ok,
-                    cancel: cancel,
-                ),
+                child: body,
             ),
         );
     }
@@ -88,33 +72,25 @@ class CustomDialog extends ModalRoute<void>
     }
 }
 
-class DialogWidget extends StatefulWidget
+abstract class CustomDialogWidget extends StatefulWidget
 {
     final String title;
-    final Widget body;
-    final VoidCallback ok;
-    final VoidCallback cancel;
 
-    DialogWidget({
+    CustomDialogWidget({
         @required this.title,
-        @required this.body,
-        @required this.ok,
-        @required this.cancel
-    }) : assert(
-        title  != null &&
-        ok     != null &&
-        cancel != null
-    );
+    }) : assert(title != null);
 
-    @override
-    State createState() => _DialogWidgetState();
+//    @override
+//    State createState() => CustomDialogWidgetState();
 }
 
-class _DialogWidgetState extends State<DialogWidget>
+abstract class CustomDialogWidgetState extends State<CustomDialogWidget>
 {
     static const _radius = 20.0;
     static const _barHeight = 50.0;
     static const _barColor = Colors.blue;
+
+    bool get okEnabled => false;
 
     Widget _title()
     {
@@ -154,7 +130,7 @@ class _DialogWidgetState extends State<DialogWidget>
             child: Container(
                 height: _barHeight,
                 decoration: BoxDecoration(
-                    color: _barColor,
+                    color: okEnabled ? _barColor : Colors.grey,
                     borderRadius: BorderRadius.only(
                         bottomRight: Radius.circular(_radius)
                     )
@@ -164,7 +140,7 @@ class _DialogWidgetState extends State<DialogWidget>
                 ),
                 margin: EdgeInsets.all(0),
             ),
-            onTap: widget.ok,
+            onTap: okEnabled ? onOk : null,
         );
 
         Widget cancelButton = GestureDetector(
@@ -181,7 +157,7 @@ class _DialogWidgetState extends State<DialogWidget>
                 ),
                 margin: EdgeInsets.all(0),
             ),
-            onTap: widget.cancel,
+            onTap: onCancel,
         );
 
         Row row = Row(
@@ -195,10 +171,24 @@ class _DialogWidgetState extends State<DialogWidget>
         return row;
     }
 
+    Widget getBody(BuildContext context);
+
+    void onOk()
+    {
+        Navigator.of(context).pop();
+    }
+
+    void onCancel()
+    {
+        Navigator.of(context).pop();
+    }
+
     @override
     Widget build(BuildContext context)
     {
-        Widget body = Container(
+        Widget body = getBody(context);
+
+        Widget container = Container(
 //            alignment: Alignment.center,
             decoration: BoxDecoration(
                 color: Defines.contentColor,
@@ -209,7 +199,7 @@ class _DialogWidgetState extends State<DialogWidget>
                     _title(),
                     Expanded(
                         child: SingleChildScrollView(
-                            child: widget.body
+                            child: body
                         )
                     ),
                     _buttons()
@@ -217,7 +207,7 @@ class _DialogWidgetState extends State<DialogWidget>
             ),
         );
 
-        Container container = Container(
+        Container sized = Container(
 //            margin: EdgeInsets.only(top: 56), + SafeArea
             padding: EdgeInsets.all(20.0),
             constraints: BoxConstraints(
@@ -226,13 +216,13 @@ class _DialogWidgetState extends State<DialogWidget>
                 maxWidth: 400,
                 maxHeight: 600,
             ),
-            child: body,
+            child: container,
         );
 
         return Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-                container
+                sized
             ],
         );
     }
