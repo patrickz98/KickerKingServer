@@ -57,6 +57,9 @@ class _AddGameWidgetState extends CustomDialogWidgetState
 
     _AddGameWidgetState(this.table);
 
+    @override
+    Color get actionColor => table.color;
+
     Theme _coloredDropdown(DropdownButton button)
     {
         return Theme(

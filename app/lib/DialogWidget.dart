@@ -88,9 +88,10 @@ abstract class CustomDialogWidgetState extends State<CustomDialogWidget>
 {
     static const _radius = 20.0;
     static const _barHeight = 50.0;
-    static const _barColor = Colors.blue;
+    static const _barColor = Defines.contentColor;
 
     bool get okEnabled => false;
+    Color get actionColor => Colors.blue;
 
     Widget _title()
     {
@@ -130,13 +131,16 @@ abstract class CustomDialogWidgetState extends State<CustomDialogWidget>
             child: Container(
                 height: _barHeight,
                 decoration: BoxDecoration(
-                    color: okEnabled ? _barColor : Colors.grey,
+                    color: _barColor,
                     borderRadius: BorderRadius.only(
                         bottomRight: Radius.circular(_radius)
                     )
                 ),
                 child: Center(
-                    child: Simple.text("OK")
+                    child: Text(
+                        "OK",
+                        style: TextStyle(color: okEnabled ? actionColor : Defines.barColor)
+                    )
                 ),
                 margin: EdgeInsets.all(0),
             ),
