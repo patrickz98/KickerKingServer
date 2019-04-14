@@ -35,7 +35,6 @@ class _GamesWidgetSate extends State<GamesWidget>
 
     void _updateTable()
     {
-        print("_updateTable");
         setState((){});
     }
 

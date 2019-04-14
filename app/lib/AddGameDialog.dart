@@ -2,24 +2,28 @@ import 'package:flutter/material.dart';
 
 import 'DialogWidget.dart';
 import 'GameManager.dart';
+import 'PlayerManager.dart';
 import 'Simple.dart';
 
 export 'DialogWidget.dart';
 
 class AddGameDialog
 {
+    final PlayerManager playerManager;
     final GameManager gameManager;
 
     AddGameDialog({
+        @required this.playerManager,
         @required this.gameManager
-    }) : assert(gameManager != null);
+    }) : assert(gameManager != null && playerManager != null);
 
     CustomDialog build(BuildContext context)
     {
         return CustomDialog(
             body: _AddGameWidget(
                 title: "Add Game",
-                gameManager: gameManager
+                gameManager: gameManager,
+                playerManager: playerManager,
             ),
         );
     }
@@ -27,16 +31,19 @@ class AddGameDialog
 
 class _AddGameWidget extends CustomDialogWidget
 {
+    final PlayerManager playerManager;
     final GameManager gameManager;
     final String title;
 
     _AddGameWidget({
         @required this.title,
+        @required this.playerManager,
         @required this.gameManager
-    }) : assert(gameManager != null), super(title: title);
+    }) : assert(gameManager != null &&
+                playerManager != null), super(title: title);
 
     @override
-    State createState() => _AddGameWidgetState(gameManager);
+    State createState() => _AddGameWidgetState(playerManager, gameManager);
 }
 
 class _AddGameWidgetState extends CustomDialogWidgetState
@@ -53,11 +60,10 @@ class _AddGameWidgetState extends CustomDialogWidgetState
     int _winnerPoints = 10;
     int _looserPoints = 0;
 
-    List<String> _player = ["Patrick", "Daniel", "Ole", "Pascal", "Thomas"];
-
+    final PlayerManager playerManager;
     final GameManager gameManager;
 
-    _AddGameWidgetState(this.gameManager);
+    _AddGameWidgetState(this.playerManager, this.gameManager);
 
     Theme _coloredDropdown(DropdownButton button)
     {
@@ -73,19 +79,19 @@ class _AddGameWidgetState extends CustomDialogWidgetState
     {
         List<DropdownMenuItem<String>> items = [];
 
-        _player.forEach((String player)
+        playerManager.player.forEach((String playerId, String nick)
         {
-            if (player == _selectedWinner2 ||
-                player == _selectedLooser1 ||
-                player == _selectedLooser2)
+            if (playerId == _selectedWinner2 ||
+                playerId == _selectedLooser1 ||
+                playerId == _selectedLooser2)
             {
                 return;
             }
 
 
             DropdownMenuItem<String> item = DropdownMenuItem<String>(
-                value: player,
-                child: Text(player)
+                value: playerId,
+                child: Text(nick)
             );
 
             items.add(item);
@@ -122,18 +128,18 @@ class _AddGameWidgetState extends CustomDialogWidgetState
     {
         List<DropdownMenuItem<String>> items = [];
 
-        _player.forEach((String player)
+        playerManager.player.forEach((String playerId, String nick)
         {
-            if (player == _selectedLooser1 ||
-                player == _selectedLooser2 ||
-                player == _selectedWinner1)
+            if (playerId == _selectedLooser1 ||
+                playerId == _selectedLooser2 ||
+                playerId == _selectedWinner1)
             {
                 return;
             }
 
             DropdownMenuItem<String> item = DropdownMenuItem<String>(
-                value: player,
-                child: Text(player)
+                value: playerId,
+                child: Text(nick)
             );
 
             items.add(item);
@@ -170,18 +176,18 @@ class _AddGameWidgetState extends CustomDialogWidgetState
     {
         List<DropdownMenuItem<String>> items = [];
 
-        _player.forEach((String player)
+        playerManager.player.forEach((String playerId, String nick)
         {
-            if (player == _selectedWinner1 ||
-                player == _selectedWinner2 ||
-                player == _selectedLooser2)
+            if (playerId == _selectedWinner1 ||
+                playerId == _selectedWinner2 ||
+                playerId == _selectedLooser2)
             {
                 return;
             }
 
             DropdownMenuItem<String> item = DropdownMenuItem<String>(
-                value: player,
-                child: Text(player)
+                value: playerId,
+                child: Text(nick)
             );
 
             items.add(item);
@@ -218,18 +224,18 @@ class _AddGameWidgetState extends CustomDialogWidgetState
     {
         List<DropdownMenuItem<String>> items = [];
 
-        _player.forEach((String player)
+        playerManager.player.forEach((String playerId, String nick)
         {
-            if (player == _selectedWinner1 ||
-                player == _selectedWinner2 ||
-                player == _selectedLooser1)
+            if (playerId == _selectedWinner1 ||
+                playerId == _selectedWinner2 ||
+                playerId == _selectedLooser1)
             {
                 return;
             }
 
             DropdownMenuItem<String> item = DropdownMenuItem<String>(
-                value: player,
-                child: Text(player)
+                value: playerId,
+                child: Text(nick)
             );
 
             items.add(item);
@@ -361,10 +367,16 @@ class _AddGameWidgetState extends CustomDialogWidgetState
     {
         super.onOk();
 
+        List<String> winner = [_selectedWinner1];
+        List<String> looser = [_selectedLooser1];
+
+        if (_selectedWinner2 != null) winner.add(_selectedWinner2);
+        if (_selectedLooser2 != null) looser.add(_selectedLooser2);
+
         Game game = Game
         (
-            winner: [_selectedWinner1],
-            looser: [_selectedLooser1],
+            winner: winner,
+            looser: looser,
             winnerPoints: _winnerPoints,
             looserPoints: _looserPoints,
             date: new DateTime.now()

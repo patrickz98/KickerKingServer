@@ -5,7 +5,7 @@ import 'GamesWidget.dart';
 import 'TableManager.dart';
 import 'SettingsScaffold.dart';
 import 'Welcome.dart';
-import 'DialogWidget.dart';
+import 'PlayerManager.dart';
 import 'AddGameDialog.dart';
 import 'GameManager.dart';
 
@@ -43,6 +43,7 @@ class _MyHomePageState extends State<MyHomePage>
 
     Color _mainColor = Defines.tableColors[ 0 ];
 
+    PlayerManager _playerManager = PlayerManager();
     GameManager _gamesManager = GameManager();
     TableManager _tableManager;
 
@@ -193,7 +194,10 @@ class _MyHomePageState extends State<MyHomePage>
             floatingActionButton: _pageIndex == 1 ? FloatingActionButton.extended(
                 onPressed: ()
                 {
-                    AddGameDialog dialog = AddGameDialog(gameManager: _gamesManager);
+                    AddGameDialog dialog = AddGameDialog(
+                        gameManager: _gamesManager,
+                        playerManager: _playerManager
+                    );
                     Navigator.of(context).push(dialog.build(context));
                 },
                 icon: Icon(Icons.add),

@@ -50,7 +50,6 @@ class GameManager
 
     void add(Game game)
     {
-        print("add: game=" + game.toJson().toString());
         _games.add(game);
         _listeners.notifyListeners();
     }
