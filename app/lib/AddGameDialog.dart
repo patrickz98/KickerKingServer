@@ -74,8 +74,6 @@ class _AddGameWidgetState extends CustomDialogWidgetState
     {
         List<DropdownMenuItem<String>> items = [];
 
-
-
         table.player.player.forEach((String playerId, String nick)
         {
             if (playerId == _selectedWinner2 ||

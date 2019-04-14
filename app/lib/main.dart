@@ -4,7 +4,7 @@ import 'Simple.dart';
 import 'GamesWidget.dart';
 import 'SettingsScaffold.dart';
 import 'Welcome.dart';
-import 'PlayerManager.dart';
+import 'PlayerWidget.dart';
 import 'AddGameDialog.dart';
 import 'TableWrapper.dart';
 
@@ -135,8 +135,6 @@ class _MyHomePageState extends State<MyHomePage>
             ),
         );
 
-        GamesWidget gamesWidget = GamesWidget(table: _table);
-
         AppBar appBar = AppBar(
             title: Text(widget.title, style: TextStyle(color: _table.color)),
             elevation: Defines.elevation,
@@ -144,20 +142,36 @@ class _MyHomePageState extends State<MyHomePage>
             brightness: Defines.brightness,
         );
 
+        Widget body;
+
+        if (_pageIndex == 0)
+        {
+            body = Center(
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                        Text('No game scores pressent', style: TextStyle(color: Defines.barTextColor)),
+                    ],
+                ),
+            );
+
+        }
+        else if (_pageIndex == 1)
+        {
+            body = GamesWidget(table: _table);
+        }
+        else
+        {
+            body = PlayerWidget(table: _table);
+        }
+
         Widget mainScaffold = Scaffold(
             backgroundColor: Defines.contentColor,
             appBar: appBar,
             body: Container(
                 color: Defines.contentColor,
                 margin: EdgeInsets.only(),
-                child: _pageIndex == 1 ? gamesWidget : Center(
-                    child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                            Text('No game scores pressent', style: TextStyle(color: Defines.barTextColor)),
-                        ],
-                    ),
-                ),
+                child: body
             ),
             bottomNavigationBar: BottomNavigationBar(
                 items: [scores, games, player],
@@ -170,7 +184,7 @@ class _MyHomePageState extends State<MyHomePage>
                 {
                     setState(()
                     {
-                        _pageIndex = index != 2 ? index : _pageIndex;
+                        _pageIndex = index;
                     });
                 },
             ),

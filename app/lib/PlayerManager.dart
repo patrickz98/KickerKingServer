@@ -8,7 +8,8 @@ class PlayerManager
         "abdcdef": "Daniel",
         "asdfaff": "Ole",
         "adfafas": "Pascal",
-        "adsfdee": "Thomas"
+        "adsfdee": "Thomas",
+        "aaaaaaa": "Jörg"
     };
 
     Map<String, String> get player => _player;
