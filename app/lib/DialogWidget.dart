@@ -91,7 +91,7 @@ abstract class CustomDialogWidgetState extends State<CustomDialogWidget>
     static const _barColor = Defines.contentColor;
 
     bool get okEnabled => false;
-    Color get actionColor => Colors.blue;
+    Color get actionColor => Defines.textColor;
 
     Widget _title()
     {
