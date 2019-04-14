@@ -43,120 +43,392 @@ class _AddGameWidget extends StatefulWidget
 
 class _AddGameWidgetState extends State<_AddGameWidget>
 {
-    String _selectedWinner;
-    String _selectedLooser;
+    String _selectedWinner1;
+    String _selectedLooser1;
+    String _selectedWinner2;
+    String _selectedLooser2;
+
+    bool _showWinner2 = false;
+    bool _showLooser2 = false;
+
+    int _maxPoints = 10;
+    int _winnerPoints = 10;
+    int _looserPoints = 0;
+
+    List<String> _player = ["Patrick", "Daniel", "Ole", "Pascal", "Thomas"];
+
+    Theme _coloredDropdown(DropdownButton button)
+    {
+        return Theme(
+            data: ThemeData(
+                canvasColor: Defines.contentColor
+            ),
+            child: button,
+        );
+    }
+
+    TableRow _winnerList()
+    {
+        List<DropdownMenuItem<String>> items = [];
+
+        _player.forEach((String player)
+        {
+            if (player == _selectedWinner2 ||
+                player == _selectedLooser1 ||
+                player == _selectedLooser2)
+            {
+                return;
+            }
+
+
+            DropdownMenuItem<String> item = DropdownMenuItem<String>(
+                value: player,
+                child: Text(player)
+            );
+
+            items.add(item);
+        });
+
+        DropdownButton button = DropdownButton<String>(
+            style: TextStyle
+            (
+                color: Defines.textColor,
+            ),
+            isExpanded: true,
+            value: _selectedWinner1,
+            items: items,
+            onChanged: (String value)
+            {
+                setState(()
+                {
+                    _selectedWinner1 = value;
+                });
+            }
+        );
+
+        TableRow row = TableRow(
+            children: [
+                Simple.text("Winner"),
+                _coloredDropdown(button),
+            ]
+        );
+
+        return row;
+    }
+
+    TableRow _winnerList2()
+    {
+        List<DropdownMenuItem<String>> items = [];
+
+        _player.forEach((String player)
+        {
+            if (player == _selectedLooser1 ||
+                player == _selectedLooser2 ||
+                player == _selectedWinner1)
+            {
+                return;
+            }
+
+            DropdownMenuItem<String> item = DropdownMenuItem<String>(
+                value: player,
+                child: Text(player)
+            );
+
+            items.add(item);
+        });
+
+        DropdownButton button = DropdownButton<String>(
+            style: TextStyle
+            (
+                color: Defines.textColor,
+            ),
+            isExpanded: true,
+            value: _selectedWinner2,
+            items: items,
+            onChanged: (String value)
+            {
+                setState(()
+                {
+                    _selectedWinner2 = value;
+                });
+            }
+        );
+
+        TableRow row = TableRow(
+            children: [
+                Container(),
+                _coloredDropdown(button),
+            ]
+        );
+
+        return row;
+    }
+
+    TableRow _looserList()
+    {
+        List<DropdownMenuItem<String>> items = [];
+
+        _player.forEach((String player)
+        {
+            if (player == _selectedWinner1 ||
+                player == _selectedWinner2 ||
+                player == _selectedLooser2)
+            {
+                return;
+            }
+
+            DropdownMenuItem<String> item = DropdownMenuItem<String>(
+                value: player,
+                child: Text(player)
+            );
+
+            items.add(item);
+        });
+
+        DropdownButton button = DropdownButton<String>(
+            style: TextStyle
+            (
+                color: Defines.textColor,
+            ),
+            isExpanded: true,
+            value: _selectedLooser1,
+            items: items,
+            onChanged: (String value)
+            {
+                setState(()
+                {
+                    _selectedLooser1 = value;
+                });
+            }
+        );
+
+        TableRow row = TableRow(
+            children: [
+                Simple.text("Looser"),
+                _coloredDropdown(button),
+            ]
+        );
+
+        return row;
+    }
+
+    TableRow _looserList2()
+    {
+        List<DropdownMenuItem<String>> items = [];
+
+        _player.forEach((String player)
+        {
+            if (player == _selectedWinner1 ||
+                player == _selectedWinner2 ||
+                player == _selectedLooser1)
+            {
+                return;
+            }
+
+            DropdownMenuItem<String> item = DropdownMenuItem<String>(
+                value: player,
+                child: Text(player)
+            );
+
+            items.add(item);
+        });
+
+        DropdownButton button = DropdownButton<String>(
+            style: TextStyle
+            (
+                color: Defines.textColor,
+            ),
+            isExpanded: true,
+            value: _selectedLooser2,
+            items: items,
+            onChanged: (String value)
+            {
+                setState(()
+                {
+                    _selectedLooser2 = value;
+                });
+            }
+        );
+
+        TableRow row = TableRow(
+            children: [
+                Container(),
+                _coloredDropdown(button),
+            ]
+        );
+
+        return row;
+    }
+
+    TableRow _winnerPointsList()
+    {
+        List<DropdownMenuItem<int>> items = [];
+
+        for (int inx = _looserPoints + 1; inx <= _maxPoints; inx++)
+        {
+            DropdownMenuItem<int> item = DropdownMenuItem<int>(
+                value: inx,
+                child: Text("$inx")
+            );
+
+            items.add(item);
+        }
+
+        DropdownButton<int> button = DropdownButton<int>(
+            style: TextStyle
+                (
+                color: Defines.textColor,
+            ),
+            isExpanded: true,
+            value: _winnerPoints,
+            items: items,
+            onChanged: (int value)
+            {
+                setState(()
+                {
+                    _winnerPoints = value;
+                    _looserPoints = (_winnerPoints <= _looserPoints)
+                        ? _winnerPoints - 1
+                        : _looserPoints;
+                });
+            }
+        );
+
+        TableRow row = TableRow(
+            children: [
+                Container(
+                    child: Simple.text("Winner Points"),
+                    padding: EdgeInsets.only(right: 10.0),
+                ),
+                _coloredDropdown(button),
+            ],
+        );
+
+        return row;
+    }
+
+    TableRow _looserPointsList()
+    {
+        List<DropdownMenuItem<int>> items = [];
+
+        for (int inx = 0; inx < _winnerPoints; inx++)
+        {
+            DropdownMenuItem<int> item = DropdownMenuItem<int>(
+                value: inx,
+                child: Text("$inx")
+            );
+
+            items.add(item);
+        }
+
+        DropdownButton<int> button = DropdownButton<int>(
+            style: TextStyle
+                (
+                color: Defines.textColor,
+            ),
+            isExpanded: true,
+            value: _looserPoints,
+            items: items,
+            onChanged: (int value)
+            {
+                setState(()
+                {
+                    _looserPoints = value;
+                });
+            }
+        );
+
+        TableRow row = TableRow(
+            children: [
+                Container(
+                    child: Simple.text("Looser Points"),
+                    padding: EdgeInsets.only(right: 10.0),
+                ),
+                _coloredDropdown(button),
+            ]
+        );
+
+        return row;
+    }
 
     @override
     Widget build(BuildContext context)
     {
-        TableRow row1 = TableRow(
-            children: [
-                Simple.text("Winner"),
-                Theme(
-                    data: ThemeData(
-                        canvasColor: Defines.contentColor
+        List<TableRow> rows = [];
+        rows.add(_winnerList());
 
-                    ),
-                    child: DropdownButton<String>(
-                        style: TextStyle(
-                            color: Defines.textColor,
-                        ),
-                        isExpanded: true,
-                        value: _selectedWinner,
-                        items: [
-                            DropdownMenuItem<String>(value: "id1", child: Text("Patrick")),
-                            DropdownMenuItem<String>(value: "id2", child: Text("Daniel")),
-                        ],
-                        onChanged: (String value)
-                        {
-                            setState(()
+        TableRow addWinner = TableRow(
+            children: [
+                Container(),
+                Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                    children:
+                    [
+                        RaisedButton.icon
+                        (
+                            label: Simple.text("Add Winner"),
+                            icon: Icon(Icons.add, color: Defines.textColor),
+                            onPressed: ()
                             {
-                                _selectedWinner = value;
-                            });
-                        }
-                    ),
+                                setState(()
+                                {
+                                    _showWinner2 = true;
+                                });
+                            },
+                            color: Defines.barColor,
+                        )
+                    ],
                 )
             ]
         );
 
-        TableRow row2 = TableRow(
-            children: [
-                Simple.text("Looser"),
-                Theme(
-                    data: ThemeData(
-                        canvasColor: Defines.contentColor
-
-                    ),
-                    child: DropdownButton(
-                        style: TextStyle(
-                            color: Defines.textColor,
-                        ),
-                        isExpanded: true,
-                        value: _selectedLooser,
-                        items: [
-                            DropdownMenuItem(
-                                value: "id1",
-                                child: Text("Patrick")
-                            ),
-                            DropdownMenuItem(value: "id2", child: Text("Daniel")),
-                        ],
-                        onChanged: (String value)
-                        {
-                            setState(()
-                            {
-                                _selectedLooser = value;
-                            });
-                        }
-                    ),
-                )
-            ]
-        );
-
-        List<Widget> _points = [];
-
-        for (int inx = 0; inx < 16; inx++)
+        if (_showWinner2)
         {
-            Container point = Container(
-                width: 45,
-                height: 45,
-                decoration: BoxDecoration(
-                    color: Defines.barColor,
-                    borderRadius: BorderRadius.all(Radius.circular(35)),
-                    border: Border.all(
-                        color: Colors.blue,
-
-                    )
-                ),
-                child: Center(child: Simple.text("$inx")),
-                margin: EdgeInsets.all(3)
-            );
-
-            _points.add(point);
+            rows.add(_winnerList2());
+        }
+        else
+        {
+            rows.add(addWinner);
         }
 
-        TableRow row3 = TableRow(
+        rows.add(_looserList());
+
+        TableRow addLooser = TableRow(
             children: [
-                Simple.text("Winner Points"),
-                SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                        children: _points,
-                    )
+                Container(),
+                Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                    children:
+                    [
+                        RaisedButton.icon
+                        (
+                            label: Simple.text("Add Looser"),
+                            icon: Icon(Icons.add, color: Defines.textColor),
+                            onPressed: ()
+                            {
+                                setState(()
+                                {
+                                    _showLooser2 = true;
+                                });
+                            },
+                            color: Defines.barColor,
+                        )
+                    ],
                 )
             ]
         );
 
-        TableRow row4 = TableRow(
-            children: [
-                Simple.text("Looser Points"),
-                SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                        children: _points,
-                    )
-                )
-            ]
-        );
+        if (_showLooser2)
+        {
+            rows.add(_looserList2());
+        }
+        else
+        {
+            rows.add(addLooser);
+        }
+
+        rows.add(_winnerPointsList());
+        rows.add(_looserPointsList());
 
         Map<int, TableColumnWidth> columnWidths = new Map();
         columnWidths[ 0 ] = IntrinsicColumnWidth();
@@ -164,16 +436,11 @@ class _AddGameWidgetState extends State<_AddGameWidget>
 
         Table table = Table(
             columnWidths: columnWidths,
-            children: [
-                row1,
-                row2,
-                row3,
-                row4
-            ],
+            defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+            children: rows,
         );
 
         return Container(
-//            color: Colors.orange
             child: table,
             margin: EdgeInsets.all(20),
         );

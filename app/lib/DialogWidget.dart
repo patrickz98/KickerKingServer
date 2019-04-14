@@ -199,7 +199,7 @@ class _DialogWidgetState extends State<DialogWidget>
     Widget build(BuildContext context)
     {
         Widget body = Container(
-            alignment: Alignment.center,
+//            alignment: Alignment.center,
             decoration: BoxDecoration(
                 color: Defines.contentColor,
                 borderRadius: BorderRadius.all(Radius.circular(_radius))
@@ -207,19 +207,33 @@ class _DialogWidgetState extends State<DialogWidget>
             child: Column(
                 children: [
                     _title(),
-                    Expanded(child: widget.body),
-//                    widget.body,
+                    Expanded(
+                        child: SingleChildScrollView(
+                            child: widget.body
+                        )
+                    ),
                     _buttons()
                 ],
             ),
         );
 
-        Container dimmer = Container(
+        Container container = Container(
 //            margin: EdgeInsets.only(top: 56), + SafeArea
             padding: EdgeInsets.all(20.0),
-            child: SafeArea(child: body),
+            constraints: BoxConstraints(
+                minWidth: 350,
+                minHeight: 350,
+                maxWidth: 400,
+                maxHeight: 600,
+            ),
+            child: body,
         );
 
-        return dimmer;
+        return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+                container
+            ],
+        );
     }
 }
