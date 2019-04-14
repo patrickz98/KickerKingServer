@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
 import 'Simple.dart';
-import 'TableManager.dart';
+import 'TableWrapper.dart';
 
 class AddTableWidget extends StatefulWidget
 {
-    final TableManager tableManager;
+    final TableWrapper table;
 
     AddTableWidget({
-        @required this.tableManager,
-    }) : assert(tableManager != null);
+        @required this.table,
+    }) : assert(table != null);
 
     @override
     State<StatefulWidget> createState() => AddTableWidgetState();

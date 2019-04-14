@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'Simple.dart';
 import 'GamesWidget.dart';
-import 'TableManager.dart';
 import 'SettingsScaffold.dart';
 import 'Welcome.dart';
 import 'PlayerManager.dart';
