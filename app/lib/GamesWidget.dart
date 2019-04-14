@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
-import 'dart:convert';
 
 import 'Simple.dart';
-import 'GameManager.dart';
-import 'AddGameDialog.dart';
+import 'TableWrapper.dart';
 
 class GamesWidget extends StatefulWidget
 {
-    final GameManager gameManager;
+    final TableWrapper table;
 
     GamesWidget({
-        @required this.gameManager
-    }) : assert(gameManager != null);
+        @required this.table
+    }) : assert(table != null);
 
     @override
     State createState() => _GamesWidgetSate();
@@ -23,14 +21,14 @@ class _GamesWidgetSate extends State<GamesWidget>
     void initState()
     {
         super.initState();
-        widget.gameManager.addListener(_updateTable);
+        widget.table.games.addListener(_updateTable);
     }
 
     @override
     void dispose()
     {
         super.dispose();
-        widget.gameManager.addListener(_updateTable);
+        widget.table.games.removeListener(_updateTable);
     }
 
     void _updateTable()
@@ -38,20 +36,31 @@ class _GamesWidgetSate extends State<GamesWidget>
         setState((){});
     }
 
+    Widget _paddingContainer(Widget child)
+    {
+        return Container(
+            padding: EdgeInsets.all(6.0),
+            child: child,
+        );
+    }
+
     @override
     Widget build(BuildContext context)
     {
         TableRow row1 = TableRow(
+            decoration: BoxDecoration(
+                color: widget.table.color,
+            ),
             children: [
-                Center(child: Simple.text("Team 1", TextStyle(fontWeight: FontWeight.bold))),
-                Center(child: Simple.text("Team 2", TextStyle(fontWeight: FontWeight.bold))),
-                Center(child: Simple.text("Result",  TextStyle(fontWeight: FontWeight.bold))),
+                _paddingContainer(Center(child: Simple.text("Winner Team", TextStyle(fontWeight: FontWeight.bold)))),
+                _paddingContainer(Center(child: Simple.text("Looser Team", TextStyle(fontWeight: FontWeight.bold)))),
+                _paddingContainer(Center(child: Simple.text("Result",      TextStyle(fontWeight: FontWeight.bold)))),
             ]
         );
 
         List<TableRow> rows = [row1];
 
-        widget.gameManager.all().forEach((Game game)
+        widget.table.games.all().forEach((Game game)
         {
             String team1 = game.winner.join("\n");
             String team2 = game.looser.join("\n");
@@ -62,10 +71,12 @@ class _GamesWidgetSate extends State<GamesWidget>
 
             TableRow row2 = TableRow(
                 children: [
-                    Text(
-                        team1,
-                        style: TextStyle(color: Defines.textColor),
-                        textAlign: TextAlign.center,
+                    _paddingContainer(
+                        Text(
+                            team1,
+                            style: TextStyle(color: Defines.textColor),
+                            textAlign: TextAlign.center,
+                        )
                     ),
                     Text(
                         team2,
@@ -91,7 +102,10 @@ class _GamesWidgetSate extends State<GamesWidget>
             defaultVerticalAlignment: TableCellVerticalAlignment.middle
         );
 
-        Container tableContainer = Container(child: table, padding: EdgeInsets.all(8.0));
+        Container tableContainer = Container(
+            child: table,
+//            padding: EdgeInsets.all(8.0)
+        );
 
         return tableContainer;
     }

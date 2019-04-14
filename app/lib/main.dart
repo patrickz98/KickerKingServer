@@ -7,7 +7,7 @@ import 'SettingsScaffold.dart';
 import 'Welcome.dart';
 import 'PlayerManager.dart';
 import 'AddGameDialog.dart';
-import 'GameManager.dart';
+import 'TableWrapper.dart';
 
 void main() => runApp(MyApp());
 
@@ -41,21 +41,7 @@ class _MyHomePageState extends State<MyHomePage>
 
     bool showLoading = true;
 
-    Color _mainColor = Defines.tableColors[ 0 ];
-
-    PlayerManager _playerManager = PlayerManager();
-    GameManager _gamesManager = GameManager();
-    TableManager _tableManager;
-
-    _MyHomePageState()
-    {
-        _tableManager = TableManager(_tableChanged);
-    }
-
-    void _tableChanged(String table)
-    {
-
-    }
+    TableWrapper _table = TableWrapper();
 
     @override
     Widget build(BuildContext context)
@@ -98,8 +84,7 @@ class _MyHomePageState extends State<MyHomePage>
                 {
                     setState(()
                     {
-                        _tableIndex = inx;
-                        _mainColor = Defines.tableColors[ _tableIndex ];
+                        _table.setTableIndex(inx);
                     });
                 },
             );
@@ -131,7 +116,7 @@ class _MyHomePageState extends State<MyHomePage>
                     Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => SettingsScaffold(
-                            tableManager: _tableManager
+                            table: _table
                         )),
                     );
                 });
@@ -151,10 +136,10 @@ class _MyHomePageState extends State<MyHomePage>
             ),
         );
 
-        GamesWidget gamesWidget = GamesWidget(gameManager: _gamesManager);
+        GamesWidget gamesWidget = GamesWidget(table: _table);
 
         AppBar appBar = AppBar(
-            title: Text(widget.title, style: TextStyle(color: _mainColor)),
+            title: Text(widget.title, style: TextStyle(color: _table.color)),
             elevation: Defines.elevation,
             backgroundColor: Defines.barColor,
             brightness: Defines.brightness,
@@ -177,7 +162,7 @@ class _MyHomePageState extends State<MyHomePage>
             ),
             bottomNavigationBar: BottomNavigationBar(
                 items: [scores, games, player],
-                selectedItemColor: _mainColor,
+                selectedItemColor: _table.color,
                 elevation: Defines.elevation,
                 backgroundColor: Defines.barColor,
                 unselectedItemColor: Defines.barTextColor,
@@ -194,14 +179,11 @@ class _MyHomePageState extends State<MyHomePage>
             floatingActionButton: _pageIndex == 1 ? FloatingActionButton.extended(
                 onPressed: ()
                 {
-                    AddGameDialog dialog = AddGameDialog(
-                        gameManager: _gamesManager,
-                        playerManager: _playerManager
-                    );
+                    AddGameDialog dialog = AddGameDialog(table: _table);
                     Navigator.of(context).push(dialog.build(context));
                 },
                 icon: Icon(Icons.add),
-                backgroundColor: _mainColor,
+                backgroundColor: _table.color,
                 elevation: Defines.elevation,
                 label: Text("Add game results"),
             ) : null,
