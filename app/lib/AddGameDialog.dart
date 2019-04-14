@@ -108,7 +108,7 @@ class _AddGameWidgetState extends State<_AddGameWidget>
 
         TableRow row = TableRow(
             children: [
-                Simple.text("Winner"),
+                Simple.text("Winner Team"),
                 _coloredDropdown(button),
             ]
         );
@@ -204,7 +204,7 @@ class _AddGameWidgetState extends State<_AddGameWidget>
 
         TableRow row = TableRow(
             children: [
-                Simple.text("Looser"),
+                Simple.text("Looser Team"),
                 _coloredDropdown(button),
             ]
         );
