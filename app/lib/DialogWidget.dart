@@ -108,7 +108,8 @@ abstract class CustomDialogWidgetState extends State<CustomDialogWidget>
                 child: Text(
                     widget.title,
                     style: TextStyle(
-                        color: Defines.textColor,
+//                        color: Defines.textColor,
+                        color: actionColor,
                         fontWeight: FontWeight.bold,
                         fontSize: 20
                     ),
@@ -127,48 +128,74 @@ abstract class CustomDialogWidgetState extends State<CustomDialogWidget>
 
     Widget _buttons()
     {
-        Widget okButton = GestureDetector(
-            child: Container(
-                height: _barHeight,
-                decoration: BoxDecoration(
-                    color: _barColor,
-                    borderRadius: BorderRadius.only(
-                        bottomRight: Radius.circular(_radius)
-                    )
-                ),
-                child: Center(
-                    child: Text(
-                        "OK",
-                        style: TextStyle(color: okEnabled ? actionColor : Defines.barColor)
-                    )
-                ),
-                margin: EdgeInsets.all(0),
+        Widget ok = Container(
+            height: _barHeight,
+            decoration: BoxDecoration(
+                color: _barColor,
+                borderRadius: BorderRadius.only(
+                    bottomRight: Radius.circular(_radius)
+                )
             ),
+            child: Center(
+                child: Text(
+                    "OK",
+                    style: TextStyle(color: okEnabled ? actionColor : Defines.barColor)
+                )
+            ),
+            margin: EdgeInsets.all(0),
+        );
+
+        Widget okButton = GestureDetector(
+            child: ok,
             onTap: okEnabled ? onOk : null,
         );
 
-        Widget cancelButton = GestureDetector(
-            child: Container(
-                height: _barHeight,
-                decoration: BoxDecoration(
-                    color: _barColor,
-                    borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(_radius)
-                    )
-                ),
-                child: Center(
-                    child: Simple.text("Cancel")
-                ),
-                margin: EdgeInsets.all(0),
+        Widget cancel = Container(
+            height: _barHeight,
+            decoration: BoxDecoration(
+                color: _barColor,
+                borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(_radius)
+                )
             ),
+            child: Center(
+                child: Simple.text("Cancel")
+            ),
+            margin: EdgeInsets.all(0),
+        );
+
+        Widget cancelButton = GestureDetector(
+            child: cancel,
             onTap: onCancel,
         );
 
+//        Row row = Row(
+//            mainAxisAlignment: MainAxisAlignment.end,
+//            children: [
+//                Expanded(child: cancelButton),
+//                Container(width: 2),
+//                Expanded(child: okButton),
+//            ]
+//        );
+
         Row row = Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-                Expanded(child: cancelButton),
-                Container(width: 2),
-                Expanded(child: okButton),
+                Container(
+                    child: FlatButton(
+                        child: Simple.text("CANCEL"),
+                        onPressed: onCancel,
+                    ),
+                ),
+                Container(
+                    child: FlatButton(
+                        child: Text(
+                            "OK",
+                            style: TextStyle(color: okEnabled ? actionColor : Defines.barColor)
+                        ),
+                        onPressed: okEnabled ? onOk : null,
+                    ),
+                ),
             ]
         );
 
