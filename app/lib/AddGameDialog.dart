@@ -368,8 +368,7 @@ class _AddGameWidgetState extends CustomDialogWidgetState
         if (_selectedWinner2 != null) winner.add(_selectedWinner2);
         if (_selectedLooser2 != null) looser.add(_selectedLooser2);
 
-        Game game = Game
-        (
+        Game game = Game(
             winner: winner,
             looser: looser,
             winnerPoints: _winnerPoints,
@@ -378,6 +377,39 @@ class _AddGameWidgetState extends CustomDialogWidgetState
         );
 
         table.games.add(game);
+    }
+
+    Widget _pointsSlider()
+    {
+        RangeSlider slider = RangeSlider(
+            values: RangeValues(
+                _looserPoints.toDouble(),
+                _winnerPoints.toDouble()
+            ),
+            min: 0,
+            max: 10,
+            divisions: 10,
+            labels: RangeLabels(
+                _looserPoints.toString(),
+                _winnerPoints.toString(),
+            ),
+            onChanged: (RangeValues values)
+            {
+                if (values.end == values.start)
+                {
+                    return;
+                }
+
+                setState(()
+                {
+                    _looserPoints = values.start.toInt();
+                    _winnerPoints = values.end.toInt();
+                });
+            },
+            activeColor: Defines.mainColor,
+        );
+
+        return slider;
     }
 
     @override
@@ -456,8 +488,9 @@ class _AddGameWidgetState extends CustomDialogWidgetState
             rows.add(addLooser);
         }
 
-        rows.add(_winnerPointsList());
-        rows.add(_looserPointsList());
+        // rows.add(_winnerPointsList());
+        // rows.add(_looserPointsList());
+        // rows.add(_pointsSlider());
 
         Map<int, TableColumnWidth> columnWidths = new Map();
         columnWidths[ 0 ] = IntrinsicColumnWidth();
@@ -470,7 +503,12 @@ class _AddGameWidgetState extends CustomDialogWidgetState
         );
 
         return Container(
-            child: table,
+            child: Column(
+                children: <Widget>[
+                    table,
+                    _pointsSlider()
+                ]
+            ),
             margin: EdgeInsets.all(20),
         );
     }

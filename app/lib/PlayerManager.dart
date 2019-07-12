@@ -5,11 +5,10 @@ class PlayerManager
 {
     Map<String, String> _player = {
         "1234567": "Patrick",
+        "asdfaff": "Thorben",
+        "adfafas": "Vlad",
+        "adsfdee": "Sönke",
         "abdcdef": "Daniel",
-        "asdfaff": "Ole",
-        "adfafas": "Pascal",
-        "adsfdee": "Thomas",
-        "aaaaaaa": "Jörg"
     };
 
     Map<String, String> get player => _player;
