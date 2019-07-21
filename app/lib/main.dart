@@ -114,9 +114,11 @@ class _MyHomePageState extends State<MyHomePage>
                 {
                     Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => SettingsScaffold(
-                            table: _table
-                        )),
+                        MaterialPageRoute(
+                            builder: (context) => SettingsScaffold(
+                                table: _table
+                            )
+                        ),
                     );
                 });
             },

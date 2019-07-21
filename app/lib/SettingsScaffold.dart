@@ -70,7 +70,17 @@ class _SettingsScaffoldState extends State<SettingsScaffold>
             );
 
             ListTile tile = ListTile(
-                leading: FlatButton(onPressed: (){}, child: Container(
+//                leading: FlatButton(onPressed: (){}, child: Container(
+//                    constraints: BoxConstraints.expand(
+//                        width: 20,
+//                        height: 20
+//                    ),
+//                    decoration: BoxDecoration(
+//                        color: Defines.tableColors[ inx ],
+//                        borderRadius: BorderRadius.all(Radius.circular(20))
+//                    ),
+//                )),
+                trailing: Container(
                     constraints: BoxConstraints.expand(
                         width: 20,
                         height: 20
@@ -79,7 +89,7 @@ class _SettingsScaffoldState extends State<SettingsScaffold>
                         color: Defines.tableColors[ inx ],
                         borderRadius: BorderRadius.all(Radius.circular(20))
                     ),
-                )),
+                ),
                 title: Simple.text('Table $inx'),
                 onTap: ()
                 {
