@@ -7,19 +7,12 @@ import 'GameManager.dart';
 export 'PlayerManager.dart';
 export 'GameManager.dart';
 
-class TableWrapper
+class TableData
 {
     final PlayerManager player = PlayerManager();
     final GameManager games = GameManager();
 
-    int _tableIndex = 0;
+    Color get color => Color(0xffAC64FF);
 
-    Color get color => Defines.tableColors[ _tableIndex ];
-
-    void setTableIndex(int inx)
-    {
-        _tableIndex = inx;
-    }
-
-    get table => _tableIndex;
+    
 }

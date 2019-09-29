@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
 
 class Game
 {
@@ -31,6 +32,11 @@ class Game
           looserPoints = json[ "looserPoints" ],
           date = DateTime.fromMicrosecondsSinceEpoch(json[ "date" ]);
 
+    static Game fromJsonStr(String str)
+    {
+        return Game.fromJson(jsonDecode(str));
+    }
+
     Map<String, dynamic> toJson() =>
     {
         "winner": winner,
@@ -39,6 +45,11 @@ class Game
         "looserPoints": looserPoints,
         "date": date.millisecondsSinceEpoch,
     };
+
+    String toJsonStr()
+    {
+        return jsonEncode(toJson());
+    }
 }
 
 class GameManager
