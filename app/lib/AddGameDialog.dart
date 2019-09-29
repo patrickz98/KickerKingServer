@@ -379,7 +379,7 @@ class _AddGameWidgetState extends CustomDialogWidgetState
         table.games.add(game);
     }
 
-    Widget _pointsSlider()
+    Widget _buildPointsSlider()
     {
         RangeSlider slider = RangeSlider(
             values: RangeValues(
@@ -506,7 +506,7 @@ class _AddGameWidgetState extends CustomDialogWidgetState
             child: Column(
                 children: <Widget>[
                     table,
-                    _pointsSlider()
+                    _buildPointsSlider()
                 ]
             ),
             margin: EdgeInsets.all(20),
