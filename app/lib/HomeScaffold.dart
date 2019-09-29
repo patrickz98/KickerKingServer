@@ -7,6 +7,7 @@ import 'Welcome.dart';
 import 'PlayerWidget.dart';
 import 'AddGameDialog.dart';
 import 'TableWrapper.dart';
+import 'GameScoresWidget.dart';
 
 class HomeScaffold extends StatefulWidget
 {
@@ -151,15 +152,7 @@ class _HomeScaffoldState extends State<HomeScaffold>
 
         if (_pageIndex == 0)
         {
-            body = Center(
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                        Text('No game scores pressent', style: TextStyle(color: Defines.barTextColor)),
-                    ],
-                ),
-            );
-
+            body = GameScoresWidget();
         }
         else if (_pageIndex == 1)
         {
